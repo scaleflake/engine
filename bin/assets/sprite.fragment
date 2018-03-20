@@ -1,0 +1,13 @@
+#version 420 core
+
+in vec2 TexCoord;
+
+out vec4 color_out;
+
+uniform vec4 color;
+uniform sampler2D ourTexture;
+
+void main()
+{
+    color_out = texture(ourTexture, TexCoord) * color;
+}
