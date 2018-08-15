@@ -3,11 +3,11 @@
 all: engine.exe
 
 clean:
-	del bin\*.exe
-	del obj\*.o
-	del obj\Physics\*.o
+	rm bin\*.exe
+	rm obj\*.o
+	rm obj\Physics\*.o
 
-PARAMS = -m64 -fexceptions -Wall -std=c++11
+PARAMS = -m64 -fexceptions -Wall -Wno-unused-function -std=c++11
 INCLUDE = -Iinclude\glew -Iinclude\stbi -Iinclude\glm -Iinclude\glew -Iinclude\glfw
 
 main.o: src\Main.cpp
@@ -35,11 +35,15 @@ collision.o: src\Physics\Collision.cpp
 shape.o: src\Physics\Shape.cpp
 	g++ $(PARAMS) $(INCLUDE) -c src\Physics\Shape.cpp -o obj\Physics\Shape.o
 
+Physics:
+	mkdir obj\Physics
+
 
 LIBS = -Llibs\glew -Llibs\glfw
-DEPENDENCES = obj\Main.o obj\OpenGL.o obj\Physics\Algorithms.o obj\Physics\Body.o obj\Physics\Collider.o obj\Physics\Collision.o obj\Physics\Shape.o obj\Windows.o
+OBJS = obj\Main.o obj\OpenGL.o obj\Physics\Algorithms.o obj\Physics\Body.o obj\Physics\Collider.o obj\Physics\Collision.o obj\Physics\Shape.o obj\Windows.o
 # -mwindows -O2 -s
 LINKING = -m64 -std=c++11 -lglew32s -lopengl32 -lglfw3 -lgdi32
 
-engine.exe: main.o opengl.o windows.o algorithms.o body.o collider.o collision.o shape.o
-	g++ $(LIBS) -o bin\Engine.exe $(DEPENDENCES) $(LINKING)
+engine.exe: main.o opengl.o windows.o Physics algorithms.o body.o collider.o collision.o shape.o
+	g++ $(LIBS) -o bin\Engine.exe $(OBJS) $(LINKING)
+	echo "All done!"
